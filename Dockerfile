@@ -28,4 +28,4 @@ RUN mkdir -p /app/data/conversations
 EXPOSE 8000
 
 # Run from project root (not backend dir)
-CMD ["uv", "run", "python", "-m", "backend.main"]
+CMD ["sh", "-c", "uv run uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
