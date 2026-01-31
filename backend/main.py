@@ -57,7 +57,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
+    
 # ============== REQUEST MODELS ==============
 class CreateConversationRequest(BaseModel):
     """Request to create a new conversation."""
