@@ -10,22 +10,22 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install uv
 RUN pip install uv
 
-# Copy backend and install dependencies
+# Copy the whole project (pyproject.toml is in root)
+COPY pyproject.toml uv.lock* ./
 COPY backend/ ./backend/
-WORKDIR /app/backend
+
+# Install dependencies from project root
 RUN uv sync
 
 # Copy built frontend
 COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 
-# Create data directory for conversations
+# Create data directory
 RUN mkdir -p /app/data/conversations
-
-WORKDIR /app/backend
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run from project root (not backend dir)
+CMD ["uv", "run", "python", "-m", "backend.main"]
